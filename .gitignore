@@ -1,4 +1,8 @@
-node_modules
-dist
+﻿node_modules/
+dist/
+.vercel/
 .env
-.npm-cache
+.env.*
+!.env.example
+!.env.production
+.npm-cache/

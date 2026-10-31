@@ -1,15 +1,36 @@
-# Tienda La Económica — Inventario
+﻿# Tienda La Económica — Frontend
 
-SPA React/Vite para el control académico de productos, existencias y movimientos. Usa Tailwind, React Router, React Hook Form + Zod, Lucide y jsPDF.
+React/Vite para inventario, conectado al backend Node.js en Render y PostgreSQL en Neon.
 
-## Uso
+## Desarrollo
 
-`npm install` y después `npm run dev`. Inicia con **admin** o **encargado** y una contraseña de tres caracteres. La autenticación es una demostración, no seguridad de producción.
+```sh
+npm ci
+npm run dev
+```
 
-`npm run build` genera la compilación de producción. Vercel puede desplegarla como SPA gracias a `vercel.json`.
+Crear `.env.local` con `VITE_DATA_MODE=api` y `VITE_API_BASE_URL=http://localhost:8080`
+para usar un backend local. `VITE_DATA_MODE=demo` activa datos de ejemplo en el navegador.
 
-## Datos y C++
+## Producción
 
-El modo predeterminado (`VITE_DATA_MODE=demo`) persiste datos en localStorage. Cambie a `api` y defina `VITE_API_BASE_URL` para un backend REST C++ con CORS habilitado. La capa central está en `src/services/api.js`; no hay llamadas HTTP dentro de páginas.
+El archivo `.env.production` contiene únicamente la URL pública de Render y el modo API.
+Vercel: preset Vite, build `npm run build`, output `dist`.
+Si existen variables del mismo nombre en Vercel, deben coincidir con ese archivo porque
+las variables del entorno de compilación tienen prioridad.
 
-Contratos previstos: `GET/POST /api/products`, `PUT /api/products/:id`, `PATCH /api/products/:id/status`, `GET /api/inventory`, `GET/POST /api/inventory/movements`, `GET /api/reports/inventory`, `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`. Los productos usan JSON `{id,code,name,description,category,price,stock,minStock,active,date}`; los movimientos `{id,productId,type,quantity,reason,date,user}`. Respuestas de error recomendadas: `{message, code, details}`.
+Backend: https://github.com/ale34783478/tienda-la-economica-backend
+
+No incluir DATABASE_URL, JWT_SECRET ni contraseñas en este repositorio o en variables VITE_*.
+Los usuarios, productos y movimientos se guardan en el backend, no en localStorage.
+
+## Permisos
+
+- Superadministrador: administra todas las cuentas y ve la columna Cuenta.
+- Administrador: edita únicamente Encargados; no ve la columna Cuenta.
+- Encargado: no ve ni accede a Reportes, Usuarios o Configuración.
+- Usuarios muestra Activo en verde e Inactivo en rojo.
+
+```sh
+npm run build
+```
